@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AppRoute from './AppRoute.tsx';
-import './index.css';
+import GlobalStyles from './GlobalStyles';
+import AppContainer from './AppContainer';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppRoute />
+    <GlobalStyles />
+    <AppContainer />
   </React.StrictMode>,
 );
