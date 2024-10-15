@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { AddTodoType } from '../AppContainer';
+import { useNavigate } from 'react-router';
 
 const Form = styled.form`
   padding: 30px;
@@ -56,9 +58,24 @@ const Button = styled.button`
   }
 `;
 
-const AddTodo = () => {
+type PropsType = {
+  addTodo: AddTodoType;
+};
+
+const AddTodo = (props: PropsType) => {
   const [todo, setTodo] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
+
+  const navigate = useNavigate();
+  const goHome = () => navigate('/');
+  const addTodoHandler = () => {
+    if (todo.trim() === '') {
+      alert('반드시 할 일을 입력해야 합니다.');
+      return;
+    }
+    props.addTodo(todo, desc);
+    goHome();
+  };
 
   return (
     <Form>
@@ -68,8 +85,12 @@ const AddTodo = () => {
       <Label htmlFor='desc'>Description</Label>
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
       <ButtonWrapper>
-        <Button type='submit'>Add</Button>
-        <Button type='button'>Cancel</Button>
+        <Button type='submit' onClick={addTodoHandler}>
+          Add
+        </Button>
+        <Button type='button' onClick={goHome}>
+          Cancel
+        </Button>
       </ButtonWrapper>
     </Form>
   );

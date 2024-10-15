@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { Plus } from 'styled-icons/fa-solid';
 
@@ -48,6 +49,9 @@ const PlusIcon = styled(Plus)`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+  const gotoAdd = () => navigate('/add');
+
   return (
     <HeaderContainer>
       <FlexRow>
@@ -58,7 +62,7 @@ const Header = () => {
         </FlexColumn>
       </FlexRow>
       <AddButton>
-        <PlusIcon />
+        <PlusIcon onClick={gotoAdd} />
       </AddButton>
     </HeaderContainer>
   );
