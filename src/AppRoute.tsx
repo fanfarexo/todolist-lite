@@ -11,7 +11,7 @@ const AppRoute = () => {
         <Route path='/' element={<Layout />}>
           <Route index element={<TodoList />} />
           <Route path='add' element={<AddTodo />} />
-          <Route path='edit/:id' element={<EditTodo />} />
+          <Route path='edit' element={<EditTodo />} />
         </Route>
       </Routes>
     </Router>
