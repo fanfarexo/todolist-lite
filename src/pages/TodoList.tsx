@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
+import { TodoItemType } from '../AppContainer';
 
 const List = styled.ul`
   color: #8c8c8c;
@@ -8,13 +9,16 @@ const List = styled.ul`
   padding-top: 50px;
 `;
 
-const TodoList = () => {
-  return (
-    <List>
-      <TodoItem />
-      <TodoItem />
-    </List>
-  );
+type PropsType = {
+  todoList: TodoItemType[];
+};
+
+const TodoList = (props: PropsType) => {
+  const todoItem = props.todoList.map((item) => {
+    return <TodoItem key={item.id} todoItem={item} />;
+  });
+
+  return <List>{todoItem}</List>;
 };
 
 export default TodoList;

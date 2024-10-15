@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Check, Trash } from 'styled-icons/fa-solid';
+import { TodoItemType } from '../AppContainer';
 
 const ItemContainer = styled.div`
   height: 80px;
@@ -34,10 +35,14 @@ const ItemButton = styled.button`
   }
 `;
 
-const TodoItem = () => {
+type PropsType = {
+  todoItem: TodoItemType;
+};
+
+const TodoItem = (props: PropsType) => {
   return (
     <ItemContainer>
-      <span>Todo Item</span>
+      <span>{props.todoItem.todo}</span>
       <ButtonWrapper>
         <ItemButton>
           <Check />

@@ -3,13 +3,18 @@ import Layout from './components/Layout';
 import TodoList from './pages/TodoList';
 import AddTodo from './pages/AddTodo';
 import EditTodo from './pages/EditTodo';
+import { TodoItemType } from './AppContainer';
 
-const AppRoute = () => {
+type PropsType = {
+  todoList: TodoItemType[];
+};
+
+const AppRoute = (props: PropsType) => {
   return (
     <Router>
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route index element={<TodoList />} />
+          <Route index element={<TodoList todoList={props.todoList} />} />
           <Route path='add' element={<AddTodo />} />
           <Route path='edit' element={<EditTodo />} />
         </Route>
