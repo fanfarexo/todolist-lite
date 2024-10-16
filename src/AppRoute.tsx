@@ -10,6 +10,7 @@ import {
   TodoItemType,
   ToggleDoneType,
 } from './AppContainer';
+import NotFound from './pages/NotFound';
 
 type PropsType = {
   todoList: TodoItemType[];
@@ -40,6 +41,7 @@ const AppRoute = (props: PropsType) => {
             element={<EditTodo todoList={props.todoList} editTodo={props.editTodo} />}
           />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   );
