@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { EditTodoType, TodoItemType } from '../AppContainer';
+import { CallbacksType, StatesType } from '../AppContainer';
 import { useNavigate, useParams } from 'react-router';
 
 const Form = styled.form`
@@ -67,15 +67,15 @@ const Button = styled.button`
 
 type TodoParam = { paramId?: string };
 type PropsType = {
-  todoList: TodoItemType[];
-  editTodo: EditTodoType;
+  states: StatesType;
+  callbacks: CallbacksType;
 };
 
-const EditTodo = (props: PropsType) => {
+const EditTodo = ({ states, callbacks }: PropsType) => {
   const { paramId } = useParams<TodoParam>();
   const navigate = useNavigate();
 
-  const todoItem = props.todoList.find((item) => item.id === parseInt(paramId ? paramId : '0'));
+  const todoItem = states.todoList.find((item) => item.id === parseInt(paramId ? paramId : '0'));
 
   const [todo, setTodo] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
@@ -92,7 +92,7 @@ const EditTodo = (props: PropsType) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (todoItem?.id !== undefined) {
-      props.editTodo(todoItem?.id, todo, desc, done ?? false);
+      callbacks.editTodo(todoItem?.id, todo, desc, done ?? false);
     }
     navigate('/');
   };

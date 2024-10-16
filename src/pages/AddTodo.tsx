@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { AddTodoType } from '../AppContainer';
+import { CallbacksType } from '../AppContainer';
 import { useNavigate } from 'react-router';
 
 const Form = styled.form`
@@ -59,10 +59,10 @@ const Button = styled.button`
 `;
 
 type PropsType = {
-  addTodo: AddTodoType;
+  callbacks: CallbacksType;
 };
 
-const AddTodo = (props: PropsType) => {
+const AddTodo = ({ callbacks }: PropsType) => {
   const [todo, setTodo] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
 
@@ -73,7 +73,7 @@ const AddTodo = (props: PropsType) => {
       alert('반드시 할 일을 입력해야 합니다.');
       return;
     }
-    props.addTodo(todo, desc);
+    callbacks.addTodo(todo, desc);
     goHome();
   };
 

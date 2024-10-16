@@ -17,10 +17,13 @@ export type TodoItemType = {
   done: boolean;
 };
 
-export type AddTodoType = (todo: string, desc: string) => void;
-export type ToggleDoneType = (id: number) => void;
-export type DeleteTodoType = (id: number) => void;
-export type EditTodoType = (id: number, todo: string, desc: string, done: boolean) => void;
+export type StatesType = { todoList: TodoItemType[] };
+export type CallbacksType = {
+  addTodo: (todo: string, desc: string) => void;
+  toggleDone: (id: number) => void;
+  deleteTodo: (id: number) => void;
+  editTodo: (id: number, todo: string, desc: string, done: boolean) => void;
+};
 
 const AppContainer = () => {
   const [todoList, setTodoList] = useState<TodoItemType[]>([
@@ -30,14 +33,14 @@ const AppContainer = () => {
     { id: 4, todo: 'Checkout Emails', desc: 'description', done: false },
   ]);
 
-  const addTodo: AddTodoType = (todo, desc) => {
+  const addTodo = (todo: string, desc: string) => {
     const newTodoList = produce(todoList, (draft) => {
       draft.push({ id: new Date().getTime(), todo, desc, done: false });
     });
     setTodoList(newTodoList);
   };
 
-  const toggleDone: ToggleDoneType = (id) => {
+  const toggleDone = (id: number) => {
     const index = todoList.findIndex((todo) => todo.id === id);
     const newTodoList = produce(todoList, (draft) => {
       draft[index].done = !draft[index].done;
@@ -45,7 +48,7 @@ const AppContainer = () => {
     setTodoList(newTodoList);
   };
 
-  const deleteTodo: DeleteTodoType = (id) => {
+  const deleteTodo = (id: number) => {
     const index = todoList.findIndex((todo) => todo.id === id);
     const newTodoList = produce(todoList, (draft) => {
       draft.splice(index, 1);
@@ -53,7 +56,7 @@ const AppContainer = () => {
     setTodoList(newTodoList);
   };
 
-  const editTodo: EditTodoType = (id, todo, desc, done) => {
+  const editTodo = (id: number, todo: string, desc: string, done: boolean) => {
     const index = todoList.findIndex((todo) => todo.id === id);
     const newTodoList = produce(todoList, (draft) => {
       draft[index] = { ...draft[index], todo, desc, done };
@@ -61,15 +64,12 @@ const AppContainer = () => {
     setTodoList(newTodoList);
   };
 
+  const states: StatesType = { todoList };
+  const callbacks: CallbacksType = { addTodo, toggleDone, deleteTodo, editTodo };
+
   return (
     <Container>
-      <AppRoute
-        todoList={todoList}
-        addTodo={addTodo}
-        toggleDone={toggleDone}
-        deleteTodo={deleteTodo}
-        editTodo={editTodo}
-      />
+      <AppRoute states={states} callbacks={callbacks} />
     </Container>
   );
 };

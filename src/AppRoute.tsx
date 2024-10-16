@@ -3,42 +3,24 @@ import Layout from './components/Layout';
 import TodoList from './pages/TodoList';
 import AddTodo from './pages/AddTodo';
 import EditTodo from './pages/EditTodo';
-import {
-  AddTodoType,
-  DeleteTodoType,
-  EditTodoType,
-  TodoItemType,
-  ToggleDoneType,
-} from './AppContainer';
+import { CallbacksType, StatesType } from './AppContainer';
 import NotFound from './pages/NotFound';
 
 type PropsType = {
-  todoList: TodoItemType[];
-  addTodo: AddTodoType;
-  toggleDone: ToggleDoneType;
-  deleteTodo: DeleteTodoType;
-  editTodo: EditTodoType;
+  states: StatesType;
+  callbacks: CallbacksType;
 };
 
-const AppRoute = (props: PropsType) => {
+const AppRoute = ({ states, callbacks }: PropsType) => {
   return (
     <Router>
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route
-            index
-            element={
-              <TodoList
-                todoList={props.todoList}
-                toggleDone={props.toggleDone}
-                deleteTodo={props.deleteTodo}
-              />
-            }
-          />
-          <Route path='add' element={<AddTodo addTodo={props.addTodo} />} />
+          <Route index element={<TodoList states={states} callbacks={callbacks} />} />
+          <Route path='add' element={<AddTodo callbacks={callbacks} />} />
           <Route
             path='edit/:paramId'
-            element={<EditTodo todoList={props.todoList} editTodo={props.editTodo} />}
+            element={<EditTodo states={states} callbacks={callbacks} />}
           />
         </Route>
         <Route path='*' element={<NotFound />} />

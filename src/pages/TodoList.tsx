@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
-import { DeleteTodoType, TodoItemType, ToggleDoneType } from '../AppContainer';
+import { CallbacksType, StatesType } from '../AppContainer';
 
 const List = styled.ul`
   color: #8c8c8c;
@@ -10,21 +10,13 @@ const List = styled.ul`
 `;
 
 type PropsType = {
-  todoList: TodoItemType[];
-  toggleDone: ToggleDoneType;
-  deleteTodo: DeleteTodoType;
+  states: StatesType;
+  callbacks: CallbacksType;
 };
 
-const TodoList = (props: PropsType) => {
-  const todoItem = props.todoList.map((item) => {
-    return (
-      <TodoItem
-        key={item.id}
-        todoItem={item}
-        toggleDone={props.toggleDone}
-        deleteTodo={props.deleteTodo}
-      />
-    );
+const TodoList = ({ states, callbacks }: PropsType) => {
+  const todoItem = states.todoList.map((item) => {
+    return <TodoItem key={item.id} todoItem={item} callbacks={callbacks} />;
   });
 
   return <List>{todoItem}</List>;
