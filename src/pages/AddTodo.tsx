@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CallbacksType } from '../AppContainer';
 import { useNavigate } from 'react-router';
@@ -68,7 +68,8 @@ const AddTodo = ({ callbacks }: PropsType) => {
 
   const navigate = useNavigate();
   const goHome = () => navigate('/');
-  const addTodoHandler = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (todo.trim() === '') {
       alert('반드시 할 일을 입력해야 합니다.');
       return;
@@ -78,16 +79,14 @@ const AddTodo = ({ callbacks }: PropsType) => {
   };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <h2>Add Todo</h2>
       <Label htmlFor='todo'>Todo</Label>
       <Input type='text' id='todo' value={todo} onChange={(e) => setTodo(e.target.value)} />
       <Label htmlFor='desc'>Description</Label>
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
       <ButtonWrapper>
-        <Button type='submit' onClick={addTodoHandler}>
-          Add
-        </Button>
+        <Button type='submit'>Add</Button>
         <Button type='button' onClick={goHome}>
           Cancel
         </Button>
