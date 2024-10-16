@@ -20,6 +20,7 @@ export type TodoItemType = {
 export type AddTodoType = (todo: string, desc: string) => void;
 export type ToggleDoneType = (id: number) => void;
 export type DeleteTodoType = (id: number) => void;
+export type EditTodoType = (id: number, todo: string, desc: string, done: boolean) => void;
 
 const AppContainer = () => {
   const [todoList, setTodoList] = useState<TodoItemType[]>([
@@ -52,6 +53,14 @@ const AppContainer = () => {
     setTodoList(newTodoList);
   };
 
+  const editTodo: EditTodoType = (id, todo, desc, done) => {
+    const index = todoList.findIndex((todo) => todo.id === id);
+    const newTodoList = produce(todoList, (draft) => {
+      draft[index] = { ...draft[index], todo, desc, done };
+    });
+    setTodoList(newTodoList);
+  };
+
   return (
     <Container>
       <AppRoute
@@ -59,6 +68,7 @@ const AppContainer = () => {
         addTodo={addTodo}
         toggleDone={toggleDone}
         deleteTodo={deleteTodo}
+        editTodo={editTodo}
       />
     </Container>
   );

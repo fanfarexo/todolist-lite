@@ -3,13 +3,20 @@ import Layout from './components/Layout';
 import TodoList from './pages/TodoList';
 import AddTodo from './pages/AddTodo';
 import EditTodo from './pages/EditTodo';
-import { AddTodoType, DeleteTodoType, TodoItemType, ToggleDoneType } from './AppContainer';
+import {
+  AddTodoType,
+  DeleteTodoType,
+  EditTodoType,
+  TodoItemType,
+  ToggleDoneType,
+} from './AppContainer';
 
 type PropsType = {
   todoList: TodoItemType[];
   addTodo: AddTodoType;
   toggleDone: ToggleDoneType;
   deleteTodo: DeleteTodoType;
+  editTodo: EditTodoType;
 };
 
 const AppRoute = (props: PropsType) => {
@@ -28,7 +35,10 @@ const AppRoute = (props: PropsType) => {
             }
           />
           <Route path='add' element={<AddTodo addTodo={props.addTodo} />} />
-          <Route path='edit' element={<EditTodo />} />
+          <Route
+            path='edit/:paramId'
+            element={<EditTodo todoList={props.todoList} editTodo={props.editTodo} />}
+          />
         </Route>
       </Routes>
     </Router>

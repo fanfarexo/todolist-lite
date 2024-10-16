@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { EditTodoType, TodoItemType } from '../AppContainer';
+import { useNavigate, useParams } from 'react-router';
 
 const Form = styled.form`
   padding: 30px;
@@ -35,6 +37,13 @@ const Textarea = styled.textarea`
   margin-bottom: 16px;
 `;
 
+const CheckBox = styled.input.attrs({ type: 'checkbox' })`
+  width: 20px;
+  height: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+`;
+
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -56,20 +65,52 @@ const Button = styled.button`
   }
 `;
 
-const EditTodo = () => {
+type TodoParam = { paramId?: string };
+type PropsType = {
+  todoList: TodoItemType[];
+  editTodo: EditTodoType;
+};
+
+const EditTodo = (props: PropsType) => {
+  const { paramId } = useParams<TodoParam>();
+  const navigate = useNavigate();
+
+  const todoItem = props.todoList.find((item) => item.id === parseInt(paramId ? paramId : '0'));
+
   const [todo, setTodo] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
+  const [done, setDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (todoItem) {
+      setTodo(todoItem.todo);
+      setDesc(todoItem.desc);
+      setDone(todoItem.done);
+    }
+  }, [todoItem]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (todoItem?.id !== undefined) {
+      props.editTodo(todoItem?.id, todo, desc, done ?? false);
+    }
+    navigate('/');
+  };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <h2>Edit Todo</h2>
       <Label htmlFor='todo'>Todo</Label>
       <Input type='text' id='todo' value={todo} onChange={(e) => setTodo(e.target.value)} />
       <Label htmlFor='desc'>Description</Label>
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
+      <Label>Done</Label>
+      <CheckBox checked={done} onChange={(e) => setDone(e.target.checked)} />
       <ButtonWrapper>
         <Button type='submit'>Edit</Button>
-        <Button type='button'>Cancel</Button>
+        <Button type='button' onClick={() => navigate('/')}>
+          Cancel
+        </Button>
       </ButtonWrapper>
     </Form>
   );
