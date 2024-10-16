@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Check, Trash } from 'styled-icons/fa-solid';
-import { TodoItemType, ToggleDoneType } from '../AppContainer';
+import { DeleteTodoType, TodoItemType, ToggleDoneType } from '../AppContainer';
 
 const ItemContainer = styled.div`
   height: 80px;
@@ -45,9 +45,17 @@ const ItemButton = styled.button`
 type PropsType = {
   todoItem: TodoItemType;
   toggleDone: ToggleDoneType;
+  deleteTodo: DeleteTodoType;
 };
 
 const TodoItem = (props: PropsType) => {
+  const deleteTodoHandler = (id: number) => {
+    if (window.confirm('할 일을 삭제할까요?')) {
+      props.deleteTodo(id);
+    }
+    return;
+  };
+
   return (
     <ItemContainer>
       <ItemText $done={props.todoItem.done} onClick={() => props.toggleDone(props.todoItem.id)}>
@@ -57,7 +65,7 @@ const TodoItem = (props: PropsType) => {
         <ItemButton>
           <Check />
         </ItemButton>
-        <ItemButton>
+        <ItemButton onClick={() => deleteTodoHandler(props.todoItem.id)}>
           <Trash />
         </ItemButton>
       </ButtonWrapper>
