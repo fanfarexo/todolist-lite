@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Check, Trash } from 'styled-icons/fa-solid';
-import { TodoItemType } from '../AppContainer';
+import { TodoItemType, ToggleDoneType } from '../AppContainer';
 
 const ItemContainer = styled.div`
   height: 80px;
@@ -9,6 +9,13 @@ const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const ItemText = styled.span<{ $done: boolean }>`
+  color: ${(props) => (props.$done ? '#d0d0d0' : '#8c8c8c')};
+  text-decoration: ${(props) => (props.$done ? 'line-through' : 'none')};
+  text-decoration-color: #ff1f5a;
+  transition: color 0.1s ease;
 `;
 
 const ButtonWrapper = styled.div`
@@ -37,12 +44,15 @@ const ItemButton = styled.button`
 
 type PropsType = {
   todoItem: TodoItemType;
+  toggleDone: ToggleDoneType;
 };
 
 const TodoItem = (props: PropsType) => {
   return (
     <ItemContainer>
-      <span>{props.todoItem.todo}</span>
+      <ItemText $done={props.todoItem.done} onClick={() => props.toggleDone(props.todoItem.id)}>
+        {props.todoItem.todo}
+      </ItemText>
       <ButtonWrapper>
         <ItemButton>
           <Check />
