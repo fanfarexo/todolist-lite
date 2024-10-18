@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
-import { CallbacksType, StatesType } from '../AppContainer';
+import { useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { TodoItemType } from '../features/todosSlice';
 
 const List = styled.ul`
   color: #8c8c8c;
@@ -9,14 +11,11 @@ const List = styled.ul`
   padding-top: 50px;
 `;
 
-type PropsType = {
-  states: StatesType;
-  callbacks: CallbacksType;
-};
+const TodoList = () => {
+  const todoList = useSelector((state: RootState) => state.todos.todoList);
 
-const TodoList = ({ states, callbacks }: PropsType) => {
-  const todoItem = states.todoList.map((item) => {
-    return <TodoItem key={item.id} todoItem={item} callbacks={callbacks} />;
+  const todoItem = todoList.map((todo: TodoItemType) => {
+    return <TodoItem key={todo.id} todoItem={todo} />;
   });
 
   return <List>{todoItem}</List>;

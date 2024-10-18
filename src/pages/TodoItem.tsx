@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Check, Trash } from 'styled-icons/fa-solid';
-import { CallbacksType, TodoItemType } from '../AppContainer';
+import { deleteTodo, TodoItemType, toggleDone } from '../features/todosSlice';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 const ItemContainer = styled.div`
   height: 80px;
@@ -45,30 +46,29 @@ const ItemButton = styled.button`
 
 type PropsType = {
   todoItem: TodoItemType;
-  callbacks: CallbacksType;
 };
 
-const TodoItem = ({ todoItem, callbacks }: PropsType) => {
+const TodoItem = (props: PropsType) => {
   const navigate = useNavigate();
-  const goEdit = () => navigate('edit/' + todoItem.id);
+
+  const dispatch = useDispatch();
 
   const deleteTodoHandler = (id: number) => {
     if (window.confirm('할 일을 삭제할까요?')) {
-      callbacks.deleteTodo(id);
+      dispatch(deleteTodo({ id }));
     }
-    return;
   };
 
   return (
     <ItemContainer>
-      <ItemText $done={todoItem.done} onClick={goEdit}>
-        {todoItem.todo}
+      <ItemText $done={props.todoItem.done} onClick={() => navigate('edit/' + props.todoItem.id)}>
+        {props.todoItem.title}
       </ItemText>
       <ButtonWrapper>
-        <ItemButton onClick={() => callbacks.toggleDone(todoItem.id)}>
+        <ItemButton onClick={() => dispatch(toggleDone({ id: props.todoItem.id }))}>
           <Check />
         </ItemButton>
-        <ItemButton onClick={() => deleteTodoHandler(todoItem.id)}>
+        <ItemButton onClick={() => deleteTodoHandler(props.todoItem.id)}>
           <Trash />
         </ItemButton>
       </ButtonWrapper>

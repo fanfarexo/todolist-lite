@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CallbacksType } from '../AppContainer';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../features/todosSlice';
 
 const Form = styled.form`
   padding: 30px;
@@ -58,24 +59,22 @@ const Button = styled.button`
   }
 `;
 
-type PropsType = {
-  callbacks: CallbacksType;
-};
-
-const AddTodo = ({ callbacks }: PropsType) => {
+const AddTodo = () => {
   const [todo, setTodo] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
 
   const navigate = useNavigate();
-  const goHome = () => navigate('/');
+
+  const dispatch = useDispatch();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (todo.trim() === '') {
       alert('반드시 할 일을 입력해야 합니다.');
       return;
     }
-    callbacks.addTodo(todo, desc);
-    goHome();
+    dispatch(addTodo({ todo, desc }));
+    navigate('/');
   };
 
   return (
@@ -87,7 +86,7 @@ const AddTodo = ({ callbacks }: PropsType) => {
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
       <ButtonWrapper>
         <Button type='submit'>Add</Button>
-        <Button type='button' onClick={goHome}>
+        <Button type='button' onClick={() => navigate('/')}>
           Cancel
         </Button>
       </ButtonWrapper>

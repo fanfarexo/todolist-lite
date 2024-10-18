@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { CallbacksType, StatesType } from '../AppContainer';
 import { useNavigate, useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { editTodo } from '../features/todosSlice';
+import { RootState } from '../app/store';
 
 const Form = styled.form`
   padding: 30px;
@@ -66,24 +68,22 @@ const Button = styled.button`
 `;
 
 type TodoParam = { paramId?: string };
-type PropsType = {
-  states: StatesType;
-  callbacks: CallbacksType;
-};
 
-const EditTodo = ({ states, callbacks }: PropsType) => {
-  const { paramId } = useParams<TodoParam>();
-  const navigate = useNavigate();
-
-  const todoItem = states.todoList.find((item) => item.id === parseInt(paramId ? paramId : '0'));
-
-  const [todo, setTodo] = useState<string>('');
+const EditTodo = () => {
+  const [title, setTitle] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
   const [done, setDone] = useState<boolean>(false);
 
+  const { paramId } = useParams<TodoParam>();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const todoList = useSelector((state: RootState) => state.todos.todoList);
+  const todoItem = todoList.find((todo) => todo.id === parseInt(paramId ?? '0'));
+
   useEffect(() => {
     if (todoItem) {
-      setTodo(todoItem.todo);
+      setTitle(todoItem.title);
       setDesc(todoItem.desc);
       setDone(todoItem.done);
     }
@@ -92,7 +92,7 @@ const EditTodo = ({ states, callbacks }: PropsType) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (todoItem?.id !== undefined) {
-      callbacks.editTodo(todoItem?.id, todo, desc, done ?? false);
+      dispatch(editTodo({ id: todoItem.id, title, desc, done }));
     }
     navigate('/');
   };
@@ -101,7 +101,7 @@ const EditTodo = ({ states, callbacks }: PropsType) => {
     <Form onSubmit={handleSubmit}>
       <h2>Edit Todo</h2>
       <Label htmlFor='todo'>Todo</Label>
-      <Input type='text' id='todo' value={todo} onChange={(e) => setTodo(e.target.value)} />
+      <Input type='text' id='title' value={title} onChange={(e) => setTitle(e.target.value)} />
       <Label htmlFor='desc'>Description</Label>
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
       <Label>Done</Label>
