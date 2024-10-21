@@ -60,7 +60,7 @@ const Button = styled.button`
 `;
 
 const AddTodo = () => {
-  const [todo, setTodo] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
 
   const navigate = useNavigate();
@@ -69,11 +69,11 @@ const AddTodo = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (todo.trim() === '') {
+    if (title.trim() === '') {
       alert('반드시 할 일을 입력해야 합니다.');
       return;
     }
-    dispatch(addTodo({ todo, desc }));
+    dispatch(addTodo({ title, desc }));
     navigate('/');
   };
 
@@ -81,7 +81,7 @@ const AddTodo = () => {
     <Form onSubmit={handleSubmit}>
       <h2>Add Todo</h2>
       <Label htmlFor='todo'>Todo</Label>
-      <Input type='text' id='todo' value={todo} onChange={(e) => setTodo(e.target.value)} />
+      <Input type='text' id='title' value={title} onChange={(e) => setTitle(e.target.value)} />
       <Label htmlFor='desc'>Description</Label>
       <Textarea id='desc' rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
       <ButtonWrapper>
