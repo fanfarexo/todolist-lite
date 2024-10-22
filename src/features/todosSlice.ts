@@ -28,10 +28,6 @@ const loadInitialState = (): TodoListType => {
 
 const initialState: TodoListType = loadInitialState();
 
-const saveLocalStorage = (todoList: TodoItemType[]) => {
-  localStorage.setItem('todos', JSON.stringify(todoList));
-};
-
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
@@ -44,17 +40,14 @@ const todosSlice = createSlice({
         done: false,
       };
       state.todoList.push(newTodo);
-      saveLocalStorage(state.todoList);
     },
     deleteTodo: (state, action: PayloadAction<{ id: number }>) => {
       state.todoList = state.todoList.filter((item) => item.id !== action.payload.id);
-      saveLocalStorage(state.todoList);
     },
     toggleDone: (state, action: PayloadAction<{ id: number }>) => {
       const todo = state.todoList.find((item) => item.id === action.payload.id);
       if (todo) {
         todo.done = !todo.done;
-        saveLocalStorage(state.todoList);
       }
     },
     editTodo: (
@@ -66,7 +59,6 @@ const todosSlice = createSlice({
         todo.title = action.payload.title;
         todo.desc = action.payload.desc;
         todo.done = action.payload.done;
-        saveLocalStorage(state.todoList);
       }
     },
   },
